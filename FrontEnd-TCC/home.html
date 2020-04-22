@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/css/materialize.min.css"
+        media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/js/materialize.min.js"
+        media="screen,projection" />
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="css/materialize-v1.0.0/materialize/js/materialize.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <title>Home - QuickJob</title>
+</head>
+
+<body>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+
+    <div class="row">
+        <div class="navbar-fixed">
+            <nav class="red darken-2">
+                <div class="nav-wrapper">
+                    <ul class="right show-on-med-and-down">
+                        <li><a href="perfil-usuario.html">Visualizar Perfil</a></li>
+                        <li><a onclick="sair()">Sair</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!--Saudações -->
+
+    <div class="container">
+        <div class="row">
+            <h4 id="saudacoes"></h4>
+        </div>
+    </div>
+    <!--serviços do usuario -->
+    <div class="container">
+        <div class="row z-depth-5" id="seus_servicos">
+
+
+
+        </div>
+    </div>
+    <br>
+
+
+    <div class="container">
+        <div class="row z-depth-1">
+            <h4 class="center">Busque por serviços</h4>
+            <div class="row">
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s9 m11 l11">
+                            <input id="busca" type="text" class="validate" onkeydown="busca_servico_enter()">
+                            <label for="busca">Pesquisar</label>
+                        </div>
+                        <div class="col s3 m1 l1">
+                            <a class="btn red" style="margin-top: 30%;" onclick="busca_servico()">
+                                <i class="material-icons prefix">search</i></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row center" id="loading_pesquisa" hidden>
+
+            </div>
+
+            <div class="row" id="resultado_pesquisa">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row z-depth-1">
+            <h4 class="center">Todos os serviços</h4>
+
+            <div class="row" id="todos_servicos">
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="center">
+        <a href="#saudacoes"><i class="material-icons">expand_less</i> Voltar ao topo</a>
+    </div>
+    <br><br>
+
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red modal-trigger" href="#add_servico">
+            <i class="large material-icons">add</i>
+        </a>
+    </div>
+
+    <div id="add_servico" class="modal">
+        <div class="modal-content">
+            <h4>Adicione um serviço</h4>
+
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="nm_servico" type="text" class="validate">
+                    <label for="nm_servico">Nome do serviço</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="vl_servico" type="number" class="validate">
+                    <label for="vl_servico">Valor do serviço</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea name="" id="desc_servico" cols="30"></textarea>
+                    <label for="desc_servico">Descrição do serviço</label>
+                </div>
+            </div>
+        </div>
+        <div class="center-align">
+            <a href="#!" class=" modal-close btn red waves-effect waves-green" onclick="cadastrar_servico()">Adicionar
+                serviço</a>
+        </div>
+        <br><br>
+    </div>
+
+    <script>        
+        let cd_usuario = localStorage.getItem("cd_usuario")
+        let nm_usuario = localStorage.getItem("nm_usuario")
+        if(cd_usuario == null || nm_usuario == null){
+            window.location.href = "index.html?msg=1"
+        }
+        let nome_splitado = nm_usuario.split(" ")
+        $("#saudacoes").html(`Seja bem vindo, ${nome_splitado[0]}!`)
+        function trata_mensagens() {
+            let query = location.search.slice(1);
+            let partes = query.split('&');
+            let data = {};
+            partes.forEach(function (parte) {
+                let chaveValor = parte.split('=');
+                let chave = chaveValor[0];
+                let valor = chaveValor[1];
+                data[chave] = valor;
+            });
+            let tipo_msg = data.msg
+            if (tipo_msg) {
+                switch (tipo_msg) {
+                    case '1':
+                        M.toast({ html: "Serviço deletado com sucesso!" })
+                        break
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.carousel');
+            var instances = M.Carousel.init(elems, { numVisible: 5, autoplay: true });
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
+            carrega_seus_servicos()
+            todos_servicos()
+            localStorage.removeItem("id_servico")
+            localStorage.removeItem("id_servico_checar")
+            trata_mensagens() 
+        });
+        function carrega_seus_servicos() {
+            let url = "http://localhost:3000/servicos_usuario/" + cd_usuario
+            $.ajax({
+                url: url,
+                type: "GET",
+                contentType: "application/json"
+            }).done((res) => {
+                if (res.err) {
+                    M.toast({html:res.err})
+                    console.log(res.err)
+                } else {
+                    $("#seus_servicos").html(`<div class="divider"></div>
+            <h4 class="center">Seus serviços</h4>`)
+                    for (let i = 0; i < res.servico.length; i++) {
+                        $("#seus_servicos").append(`
+                        <div class="col s6 m4 l4">
+                            <div class="card horizontal">
+                                <div class="card-stacked red-text">
+                                    <div class="card-content">
+                                        <h5>${res.servico[i].nm_servico}</h5>
+                                        <p>${res.servico[i].ds_servico}</p>
+                                    </div>
+                                    <div class="card-action">
+                                        <a onclick="checar_servico(${res.servico[i].cd_servico})">Checar serviço</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        `)
+                    }
+                }
+            })
+        }
+        function todos_servicos() {
+            let url = "http://localhost:3000/todos_servicos"
+            $.ajax({
+                url: url,
+                type: "GET",
+                contentType: "application/json"
+            }).done((res) => {
+                if (res.err) {
+                    M.toast({html:res.err})
+                } else if (res.msg) {
+                    $("#todos_servicos").html(`<h4>${res.msg}</h4>`)
+                } else {
+                    $("#todos_servicos").html(`<div class="row>"`)
+                    let count = 0
+                    for (let i = 0; i < res.servicos.length; i++) {
+                        if (count == 2) {
+                            count = 0
+                            $("#todos_servicos").append(`
+                            </div><div class="row">
+                                <div class="col s6 m4 l4">
+                                    <div class="card horizontal">
+                                        <div class="card-stacked">
+                                            <div class="card-content red-text">
+                                                <h5>${res.servicos[i].nm_servico}</h5>
+                                                <p>${res.servicos[i].ds_servico}</p>
+                                                <p>R$ ${res.servicos[i].vl_servico}</p>
+                                            </div>
+                                            <div class="card-action">
+                                                    <a onclick="visualizar_servico(${res.servicos[i].cd_servico})">Ver mais</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                `)
+                        } else {
+                            count++
+                            $("#todos_servicos").append(`
+                                <div class="col s6 m4 l4">
+                                    <div class="card horizontal">
+                                        <div class="card-stacked">
+                                            <div class="card-content red-text">
+                                                <h5>${res.servicos[i].nm_servico}</h5>
+                                                <p>${res.servicos[i].ds_servico}</p>
+                                                <p>R$ ${res.servicos[i].vl_servico}</p>
+                                            </div>
+                                            <div class="card-action">
+                                                    <a onclick="visualizar_servico(${res.servicos[i].cd_servico})">Ver mais</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                `)
+                        }
+                    }
+                }
+            })
+        }
+        function busca_servico_enter() {
+            if (event.keyCode == 13) {
+                event.preventDefault()
+                busca_servico()
+            }
+        }
+        function busca_servico() {
+            let busca = $("#busca").val().trim()
+            if (busca == "") {
+                M.toast({ html: "Campo vazio" })
+            } else {
+                $("#loading_pesquisa").html(`<div class="preloader-wrapper small active">
+                    <div class="spinner-layer spinner-red-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>`)
+                $("#loading_pesquisa").show()
+                let url = "http://localhost:3000/busca"
+                $.ajax({
+                    url: url,
+                    contentType: "application/json",
+                    type: "POST",
+                    data: JSON.stringify({
+                        busca: busca
+                    })
+                }).done((res) => {
+                    if (res.err) {
+                        M.toast({html:res.err})
+                    } else if (res.msg) {
+                        M.toast({ html: res.msg })
+                    } else {
+                        $("#loading_pesquisa").html("")
+                        $("#loading_pesquisa").hide()
+                        $("#resultado_pesquisa").html("")
+                        result = res.res[0]
+                        for (let i = 0; i < result.length; i++) {
+                            $("#resultado_pesquisa").append(`
+                            <div class="col s6 m4 l4">
+                                <div class="card horizontal">
+                                    <div class="card-stacked">
+                                        <div class="card-content red-text">
+                                            <h5>${result[i].nm_servico}</h5>
+                                            <p>${result[i].ds_servico}</p>
+                                            <p>R$ ${result[i].vl_servico}</p>
+                                        </div>
+                                        <div class="card-action">
+                                                <a onclick="visualizar_servico(${result[i].cd_servico})">Ver mais</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            `)
+                        }
+                    }
+                })
+            }
+        }
+        function sair() {
+            localStorage.clear()
+            window.location.href = "index.html"
+        }
+        function visualizar_servico(id_servico) {
+            localStorage.setItem("id_servico", id_servico)
+            window.location.href = "servico_solicitado.html"
+        }
+        function checar_servico(id_servico) {
+            localStorage.setItem("id_servico_checar", id_servico)
+            window.location.href = "relatorio_servico.html"
+        }
+        function cadastrar_servico() {
+            let nm_servico = $("#nm_servico").val().trim()
+            let vl_servico = $("#vl_servico").val().trim()
+            let ds_servico = $("#desc_servico").val().trim()
+            if (nm_servico == "" || vl_servico == "" || ds_servico == "") {
+                M.toast({ html: "Campos vazios" })
+            } else {
+                let url = "http://localhost:3000/servicos"
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        nm_servico: nm_servico,
+                        ds_servico: ds_servico,
+                        vl_servico: vl_servico,
+                        cd_usuario: cd_usuario
+                    })
+                }).done((res) => {
+                    if (res.err) {
+                        M.toast({html:res.err})
+                    } else {
+                        if (res.msg) {
+                            M.toast({ html: res.msg })
+                            carrega_seus_servicos()
+                            $("#nm_servico").val("")
+                            $("#vl_servico").val("")
+                            $("#desc_servico").val("")
+                        }
+                    }
+                })
+            }
+        }
+    </script>
+</body>
+
+</html>

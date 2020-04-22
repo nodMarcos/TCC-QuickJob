@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang=pt-br>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/css/materialize.min.css"
+        media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/js/materialize.min.js"
+        media="screen,projection" />
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="css/materialize-v1.0.0/materialize/js/materialize.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <title>Visualizar Serviço - QuickJob</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="navbar-fixed">
+            <nav class="red darken-2">
+                <div class="nav-wrapper">
+                    <ul class="right show-on-med-and-down">
+                        <li>
+                            <a onclick="voltar()">Voltar</a>
+                        </li>
+                        <li>
+                            <a onclick="sair()">Sair</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <div class="row">
+                    <h3>Dados do serviço</h3>
+                    <div class="divider"></div>
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5>Nome do serviço</h5>
+                            <label id="nm_servico"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5>Avaliação</h5>
+                            <div id="avaliacao">
+                            </div>
+
+                            <a class="modal-trigger" href="#comentarios">Ver comentarios</a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5>Descrição</h5>
+                            <label id="ds_servico"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5>Valor</h5>
+                            <label id="vl_servico"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col s12 m6 l6">
+                <div class="row">
+                    <h3>Dados do prestador</h3>
+                    <div class="divider"></div>
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5>Nome completo</h5>
+                            <label id="nm_prestador"></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5>Endereço</h5>
+                            <div class="divider"></div>
+                            <div class="row">
+                                <div class="col s12 m6 l6">
+                                    <h6>Logradouro</h6>
+                                    <label id="logradouro"></label>
+                                </div>
+                                <div class="col s12 m6 l6">
+                                    <h6>Bairro</h6>
+                                    <label id="bairro"></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6">
+                                    <h6>Cidade</h6>
+                                    <label id="cidade"></label>
+                                </div>
+                                <div class="col s12 m6 l6">
+                                    <h6>Estado</h6>
+                                    <label id="estado"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row">
+                        <div class="col s12 m12 l12">
+                            <h5>Contatos</h5>
+                            <div id="contatos">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="comentarios" class="modal">
+        <div class="modal-content">
+            <h4>Todos os comentários</h4>
+
+            <div class="row" id="comentario">
+                <ul>
+
+                </ul>
+            </div>
+        </div>
+        <div class="center-align">
+            <br><br>
+            <a href="#!" class=" modal-close btn red darken-2 waves-effect waves-green">Fechar</a>
+        </div>
+        <br><br>
+    </div>
+
+
+    <div id="modal_avaliacao" class="modal">
+        <div class="modal-content">
+            <h4>Justifique sua avaliação</h4>
+            <div id="valor_avaliacao">
+                
+            </div>
+        <div class="center-align">
+            <br>
+                <textarea placeholder="Comentário" id="txt_comentario" style="border-radius: 40px; padding: 10px;"></textarea>
+        </div>
+        </div>
+
+        <div class="center-align">
+            <br><br>
+            <a href="#!" class="modal-close btn red darken-2 waves-effect waves-green" onclick="avaliar()">Avaliar</a>
+            <a href="#!" class=" modal-close btn red darken-2 waves-effect waves-green">Cancelar</a>
+        </div>
+        <br><br>
+    </div>
+
+
+    <script>
+
+        var valor_avaliacao
+
+        let cd_usuario = localStorage.getItem("cd_usuario")
+        let nm_usuario = localStorage.getItem("nm_usuario")
+
+        var cd_servico = localStorage.getItem("id_servico")
+
+        $(document).ready(() => {
+            carrega_servico()
+
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
+
+            // insere mais uma visualização
+            dispara_visualizacao()
+            
+
+        })
+        if(cd_usuario == null || nm_usuario == null){
+            window.location.href = "index.html?msg=1"
+        }
+
+        function dispara_visualizacao(){
+            $.ajax({
+                url: "http://localhost:3000/acessos",
+                type: "PUT",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    cd_servico: cd_servico
+                })
+            }).done((res) => {
+                if(res.err){
+                    M.toast({html:"Erro"})
+                    console.log(res.err)
+                }
+            })
+        }
+
+        function sair() {
+            localStorage.clear()
+            window.location.href = "index.html"
+        }
+
+        function voltar() {
+            localStorage.removeItem("id_servico")
+            window.location.href = "home.html"
+        }
+
+        function avaliar(){
+            let nota = valor_avaliacao
+            let comentario = $("#txt_comentario").val()
+
+            let url = "http://localhost:3000/avaliacao"
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    cd_servico: cd_servico,
+                    cd_usuario: cd_usuario,
+                    nota: nota,
+                    mensagem: comentario
+                })
+            }).done((res) => {
+                if(res.err){
+                    M.toast({html: res.err})
+                }else{
+                    if(res.msg){
+                        M.toast({html: res.msg})
+                    }
+                }
+            })
+        }
+        function carrega_servico() {
+            if (cd_servico == null) {
+                window.location.href = "home.html"
+            } else {
+                let url = "http://localhost:3000/servicos_visitante/" + cd_servico
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    contentType: "application/json"
+                }).done((res) => {
+                    if (res.err) {
+                        M.toast({html:res.err})
+                        console.log(res.err)
+                    } else if(res.err2){
+                        M.toast({html:res.err2})
+                        console.log(res.err2)
+                    }else{
+                        console.log(res.servico[0])
+                       
+                        let comentarios = res.comentarios
+                        console.log(comentarios)
+
+                        renderiza_avaliacao(res.servico[0].avaliacao)
+                        $("#nm_servico").html(res.servico[0].nm_servico)
+                        $("#ds_servico").html(res.servico[0].ds_servico)
+                        $("#vl_servico").html("R$"+res.servico[0].vl_servico.toFixed(2))
+                        
+                        for(var i = 0; i<comentarios.length;i++){
+                            $("#comentario").append(`
+                            <div class="divider"></div>
+                            <h6><a href="#">${comentarios[i].nm_usuario}</a></h6>
+                            `)
+                            for(var j = 1; j <= comentarios[i].nivel_avaliacao; j++){
+                                if(j <= comentarios[i].nivel_avaliacao){
+                                $("#comentario").append(`
+                                <i class="material-icons small yellow-text">star</i>
+                                `)
+                                }
+                            }
+                            $("#comentario").append(`<p>${comentarios[i].comentario_avaliacao}</p>`)
+                    
+                        }
+
+
+                        //-------------------dados do prestador
+                        $("#nm_prestador").html(res.servico[0].nm_usuario)
+
+                        carrega_contato(res.servico[0].cd_usuario)
+
+                        //Nova variável "cep" somente com dígitos.
+                        var cep = res.servico[0].cd_cep;
+
+                        //Verifica se campo cep possui valor informado.
+                        if (cep != "") {
+
+                            //Expressão regular para validar o CEP.
+                            var validacep = /^[0-9]{8}$/;
+
+                            //Valida o formato do CEP.
+                            if (validacep.test(cep)) {
+
+                                //Consulta o webservice viacep.com.br/
+                                $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+
+                                    if (!("erro" in dados)) {
+                                        //Atualiza os campos com os valores da consulta.
+                                        $("#logradouro").html(dados.logradouro);
+                                        $("#bairro").html(dados.bairro);
+                                        $("#cidade").html(dados.localidade);
+                                        $("#estado").html(dados.uf);
+
+                                    } //end if.
+                                    else {
+                                        $("#logradouro").html("-")
+                                        $("#bairro").html("-")
+                                        $("#cidade").html("-")
+                                        $("#estado").html("-")
+                                    }
+                                });
+                            } //end if.
+                            else {
+                                $("#logradouro").html("-")
+                                $("#bairro").html("-")
+                                $("#cidade").html("-")
+                                $("#estado").html("-")
+                            }
+                        }
+                    }
+                })
+            }
+        }
+
+        function muda_avaliacao(valor){
+            valor_avaliacao = valor
+
+
+            $("#valor_avaliacao").html("")
+
+            for(let i = 1; i < 6; i++){
+                if(i <= valor_avaliacao){
+                    $("#valor_avaliacao").append(`
+                        <i class="material-icons small yellow-text">star</i>
+                    `)
+                }else{
+                    $("#valor_avaliacao").append(`
+                        <i class="material-icons small black-text">star</i>
+                    `)
+                }
+            }
+        }
+
+        function renderiza_avaliacao(valor){
+
+            $("#avaliacao").html("")
+
+            for(let i = 1; i < 6; i++){
+                if(i <= valor){
+                    $("#avaliacao").append(`
+                        <a class="modal-trigger" href="#modal_avaliacao" onclick="muda_avaliacao(${i})"><i class="material-icons small yellow-text">star</i></a>
+                    `)
+                }else{
+                    $("#avaliacao").append(`
+                        <a class="modal-trigger" href="#modal_avaliacao" onclick="muda_avaliacao(${i})"><i class="material-icons small black-text">star</i></a>
+                    `)
+                }
+            }
+        }
+
+        function carrega_contato(id_usuario) {
+            let url = "http://localhost:3000/contatos/" + id_usuario
+
+            $.ajax({
+                url: url,
+                contentType: "application/json",
+                type: "GET"
+            }).done((res) => {
+                if (res.err) {
+                    M.toast({html:res.err})
+                } else {
+                    console.log("--contatos--")
+                    console.log(res.contato)
+                    $("#contatos").html("")
+                    if (res.contato.length == []) {
+                        $("#contatos").html(`<label>Sem contato registrado</label>`)
+                    } else {
+                        let contato = res.contato
+                        for (let i = 0; i < contato.length; i++) {
+                            if (contato[i].tel_contato || contato[i].email_contato) {
+                                if (contato[i].tel_contato == "") {
+                                    $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i><label> Sem telefone </label>
+                                    </div>
+
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">email</i> <label>${contato[i].email_contato}</label>
+                                    </div>
+                                </div>
+                                `)
+
+                                } else if (contato[i].email_contato == "") {
+                                    $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i><label>${contato[i].tel_contato}</label>
+                                    </div>
+
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">email</i> <label> Sem email </label>
+                                    </div>
+                                </div>
+                                `)
+                                }else{
+                                    $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i><label>${contato[i].tel_contato}</label>
+                                    </div>
+
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">email</i> <label>${contato[i].email_contato}</label>
+                                    </div>
+                                </div>
+                                `)
+                                }
+                            }
+                            else {
+                                console.log(contato[i])
+                                $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i><label>${contato[i].tel_usuario}</label>
+                                    </div>
+
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">email</i> <label>${contato[i].ds_email}</label>
+                                    </div>
+                                </div>
+                                `)
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

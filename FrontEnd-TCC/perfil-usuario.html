@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/css/materialize.min.css"
+        media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/js/materialize.min.js"
+        media="screen,projection" />
+    <link rel="stylesheet" href="css/estilo.css">
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="css/materialize-v1.0.0/materialize/js/materialize.js"></script>
+
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/jquery.maskedinput.js" type="text/javascript"></script>
+
+    <script></script>
+    <title>Perfil - QuickJob</title>
+</head>
+
+<body>
+
+    <div class="row">
+        <div class="navbar-fixed">
+            <nav class="red darken-2">
+                <div class="nav-wrapper">
+                    <ul class="right show-on-med-and-down">
+                        <li><a href="home.html">Voltar</a></li>
+                        <li><a onclick="sair()">Sair</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container z-depth-1 center-align" style="margin-top: 5%;">
+        <div class="row">
+            <br>
+            <div class="center">
+                <i class="material-icons large circle red white-text">person</i>
+            </div>
+            <h4 class="center" style="margin-top: -1%;">Dados pessoais</h4>
+            <a class="btn red darken-2 modal-trigger" href="#altera_dados">Alterar dados</a>
+            <a class="btn red darken-2 modal-trigger" href="#altera_senha">Alterar senha</a>
+            <div class="divider"></div>
+            <div class="col s12 m6 l6">
+                <h5 id="nm_usuario"></h5>
+
+            </div>
+            <div class="col s12 m6 l6">
+                <h5 id="email_usuario">
+                </h5>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <h5 id="dt_nascimento"></h5>
+
+            </div>
+            <div class="col s12 m6 l6">
+                <h5 id="tel_usuario">
+                </h5>
+            </div>
+        </div>
+        <div class="divider"></div>
+        <div class="rows">
+            <h5>Contatos</h5>
+            <a class="btn-floating red white-text modal-trigger" href="#add_contato"><i
+                    class="material-icons">add</i></a>
+            <div class="row" id="contatos">
+
+
+            </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="row">
+            <h5 class="center"> <i class="material-icons">location_on</i> Localização</h5>
+            <a class="btn red darken-2 modal-trigger" href="#altera_localizacao">Alterar localização</a>
+            <div class="divider"></div>
+            <div class="col s12 m6 l6">
+                <h5>Logradouro</h5>
+                <label id="logradouro"></label>
+
+            </div>
+            <div class="col s12 m6 l6">
+                <h5>
+                    Bairro
+                </h5>
+                <label id="bairro"></label>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="row">
+            <div class="col s12 m6 l6">
+                <h5>Cidade</h5>
+                <label id="cidade"></label>
+
+            </div>
+            <div class="col s12 m6 l6">
+                <h5>
+                    Estado
+                </h5>
+                <label id="estado"></label>
+            </div>
+        </div>
+        <br>
+    </div>
+
+
+
+    <div id="add_contato" class="modal center-align">
+        <div class="modal-content">
+            <h4>Adicione um contato</h4>
+
+            <div class="row">
+                <input id="novo_tel_contato" type="text" class="validate">
+                <label for="novo_tel_contato">Novo telefone</label>
+            </div>
+            <div class="row">
+                <input type="text" id="novo_email_contato">
+                <label for="novo_email_contato">Novo email</label>
+            </div>
+        </div>
+        <div class="center-align">
+            <a class=" modal-close btn red waves-effect waves-green" onclick="add_contato()">Adicionar
+                contato</a>
+        </div>
+        <br><br>
+    </div>
+
+    <div id="altera_senha" class="modal center-align">
+            <div class="modal-content">
+                <h4>Alterar senha</h4>
+
+                <div class="row">   
+                    <div class="col s12 m12 l12">
+                        <input id="senha" type="password" class="validate" style="max-width: 250px;">
+                        <br>
+                        <label for="senha">Digite sua senha atual</label>
+                    </div>                     
+                </div>
+    
+                <div class="row">
+                    <div class="col s12 m6 l6">
+                        <input id="nova_senha" type="password" class="validate">
+                        <label for="nova_senha">Digite uma nova senha</label>
+                    </div>
+                    <div class="col s12 m6 l6">
+                        <input type="password" id="nova_senha_confirm">
+                        <label for="nova_senha_confirm">Confirme a nova senha</label>
+                    </div>
+                </div>
+            </div>
+            <div class="center-align">
+                <a class=" modal-close btn red waves-effect waves-green" onclick="troca_senha()">Alterar senha</a>
+            </div>
+            <br><br>
+        </div>
+
+
+    <div id="altera_dados" class="modal center-align">
+        <div class="modal-content">
+            <h4>Alterar dados</h4>
+
+            <div class="row">
+                <div class="col s12 m6 l6">
+                    <input id="novo_nome" type="text" class="validate">
+                    <label for="novo_nome">Nome completo</label>
+                </div>
+                <div class="col s12 m6 l6">
+                    <input type="text" id="novo_email">
+                    <label for="novo_email">Email</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6 l6">
+                    <input id="nova_data" type="text" class="validate">
+                    <label for="nova_data">Data de nascimento</label>
+                </div>
+                <div class="col s12 m6 l6">
+                    <input type="text" id="novo_tel">
+                    <label for="novo_tel">Telefone</label>
+                </div>
+            </div>
+        </div>
+        <div class="center-align">
+            <a class=" modal-close btn red waves-effect waves-green" onclick="altera_dados()">Alterar dados</a>
+        </div>
+        <br><br>
+    </div>
+
+    <div id="altera_localizacao" class="modal center-align">
+        <div class="modal-content">
+            <h4>Alterar localização</h4>
+
+            <div class="row center-align">
+                <div class="input-field">
+                    <input type="text" id="novo_cep" placeholder="Digite seu cep" style="max-width: 250px;">
+                </div>
+            </div>
+        </div>
+        <div class="center-align">
+            <a class=" modal-close btn red waves-effect waves-green" onclick="troca_cep()">Alterar localização</a>
+        </div>
+        <br><br>
+    </div>
+
+
+    <script>
+
+$(function () {
+      $.mask.definitions['~'] = "[+-]";
+      $("#nova_data").mask("99/99/9999")
+      $("#novo_tel").mask("(99) 99999-9999")
+      $("#novo_tel_contato").mask("(99) 99999-9999")
+	  $("#novo_cep").mask("99999-999")
+	
+    });
+
+        let cd_usuario = localStorage.getItem("cd_usuario")
+        let nm_usuario = localStorage.getItem("nm_usuario")
+        if(cd_usuario == null || nm_usuario == null){
+            window.location.href = "index.html?msg=1"
+        }
+        $(document).ready(() => {
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
+
+            carrega_usuario()
+        })
+        function sair() {
+            localStorage.clear()
+            window.location.href = "index.html"
+        }
+
+        function altera_dados() {
+            let nome = $("#novo_nome").val().trim()
+            let email = $("#novo_email").val().trim()
+            let tel = $("#novo_tel").val().trim()
+            let dt_nascimento = $("#nova_data").val().trim()
+            let data_atual = new Date().getFullYear()
+            
+            dt_nascimento = dt_nascimento.split("/")
+            let dif_idade = data_atual - dt_nascimento[2]
+            console.log(dt_nascimento)
+               
+
+            if(dt_nascimento[2] > data_atual || dt_nascimento[1] > 12 || dt_nascimento[0] > 31){
+				M.toast({html: "Data inválida!"})
+			}else if (dif_idade < 18){
+				M.toast({html: "Você precisa ter mais de 18 anos para se cadastrar!"})
+            }
+            else if(dif_idade >=100){
+                M.toast({html: "Digite uma idade válida"})
+            }
+            else if(nome == "" || email == "" || tel == "" || dt_nascimento == ""){
+                M.toast({html: "Campos vazios!"})
+            }else{
+                let url = "http://localhost:3000/usuario"
+                dt_nascimento = dt_nascimento[2] + "-" + dt_nascimento[1] + "-" + dt_nascimento[0]
+            
+                $.ajax({
+                    url: url,
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        nm_usuario: nome,
+                        dt_nascimento: dt_nascimento,
+                        tel_usuario: tel,
+                        ds_email: email,
+                        cd_usuario: cd_usuario
+                    })
+                }).done((res) => {
+                    if(res.err){
+                        M.toast({html:res.err})
+                        console.log(res.err)
+                    }else{
+                        M.toast({html: "Dados atualizados!"})
+                        carrega_usuario()
+                    }
+                })
+            }
+        }
+
+        function troca_senha(){
+            let senha = $("#senha").val().trim()
+
+            let nova_senha = $("#nova_senha").val().trim()
+            let nova_senha_confirm = $("#nova_senha_confirm").val().trim()
+
+            if(nova_senha != nova_senha_confirm){
+                M.toast({html: "As senhas devem ser iguais!"})
+            }else if (nova_senha.length < 6){
+                M.toast({html: "Sua senha deve conter no mínimo 6 caractéres!"})
+            }else{
+                let url = "http://localhost:3000/senha"
+
+                $.ajax({
+                    url: url,
+                    contentType: "application/json",
+                    type: "PUT",
+                    data: JSON.stringify({
+                        senha: senha,
+                        nova_senha: nova_senha,
+                        cd_usuario: cd_usuario
+                    })
+                }).done((res) => {
+                    if(res.err){
+                        M.toast({html: res.err})
+                        console.log(res.err)
+                    }else{
+                        M.toast({html: "Senha alterada com sucesso!"})
+                        $("#senha").val("")
+                        $("#nova_senha").val("")
+                        $("#nova_senha_confirm").val("")
+                    }
+                })
+            }
+        }
+
+        function troca_cep() {
+            let novo_cep = $("#novo_cep").val().trim()
+            let cep_quebrado =novo_cep.split("-")
+            let cep = cep_quebrado[0] + cep_quebrado[1]
+            if (cep == "") {
+                M.toast({ html: "Cep vazio!" })
+            } else {
+                let url = "http://localhost:3000/cep"
+
+                $.ajax({
+                    url: url,
+                    contentType: "application/json",
+                    type: "PUT",
+                    data: JSON.stringify({
+                        cd_usuario: cd_usuario,
+                        cep: cep
+                    })
+                }).done((res) => {
+                    if (res.err) {
+                        M.toast({html:res.err})
+                        console.log(res.err)
+                    } else {
+                        M.toast({ html: "Localização alterada com sucesso!" })
+                        carrega_usuario()
+                    }
+                })
+            }
+        }
+
+        function carrega_usuario() {
+            let url = "http://localhost:3000/usuario/" + cd_usuario
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                contentType: "application/json"
+            }).done((res) => {
+                if (res.err) {
+                    M.toast({html:res.err})
+                    console.log(res.err)
+                } else {
+                    let usuario = res.usuario[0]
+                    let contato = res.contatos
+                    let data_valida = usuario.dt_nascimento.split("T")
+                    let data_quebrada = data_valida[0].split("-")
+                    let data = data_quebrada[2] +data_quebrada[1]+data_quebrada[0]
+
+                    $("#nm_usuario").html(`<i class="material-icons small">person</i>${usuario.nm_usuario}`)
+                    $("#email_usuario").html(`<i class="material-icons small">email</i>${usuario.ds_email}`)
+                    $("#dt_nascimento").html(`<i class="material-icons small">child_care</i> ${data_quebrada[2] + "/"+data_quebrada[1]+"/"+data_quebrada[0]}`)
+                    $("#tel_usuario").html(`<i class="material-icons small">phone</i>${usuario.tel_usuario}`)
+                    $("#novo_nome").val(usuario.nm_usuario)
+                    $("#novo_email").val(usuario.ds_email)
+                    $("#novo_tel").val(usuario.tel_usuario)
+                    $("#nova_data").val(data)
+
+                    $("#contatos").html("")
+                    for (let i = 0; i < contato.length; i++) {
+                        if (contato[i].tel_contato == null || contato[i].tel_contato == "") {
+                            $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i> <label> Sem Telefone</label>
+                                    </div>
+
+                                    <div class="col s5 m5 l5">
+                                        <i class="material-icons">email</i>${contato[i].email_contato}
+                                    </div>
+                                        
+                                    <div class="col s1 m1 l1">
+                                        <a href="#" onclick="deleta_contato(${contato[i].cd_contato})"><i class="material-icons small red white-text circle">close</i></a>
+                                    </div>
+                                </div>
+                                `)
+
+                        } else if (contato[i].email_contato == null || contato[i].email_contato == "") {
+                            $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i>${contato[i].tel_contato}
+                                    </div>
+
+                                    <div class="col s5 m5 l5">
+                                        <i class="material-icons">email</i> <label>Sem email</label>
+                                    </div>
+
+                                    
+                                    <div class="col s1 m1 l1">
+                                        <a href="#" onclick="deleta_contato(${contato[i].cd_contato})"><i class="material-icons small red white-text circle">close</i></a>
+                                    </div>
+                                </div>
+                                `)
+                        } else {
+                            $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i>${contato[i].tel_contato}
+                                    </div>
+
+                                    <div class="col s5 m5 l5">
+                                        <i class="material-icons">email</i>${contato[i].email_contato}
+                                    </div>
+
+                                    
+                                    <div class="col s1 m1 l1">
+                                        <a href="#" onclick="deleta_contato(${contato[i].cd_contato})"><i class="material-icons small red white-text circle">close</i></a>
+                                    </div>
+                                </div>
+                                `)
+                        }
+                    }
+
+
+                    if (contato == []) {
+                        $("#contatos").append(`
+                        <div class="col s5 m6 l6">
+                            <i class="material-icons small">phone</i> ${contato.tel_contato}
+                        </div>
+                        <div class="col s5 m5 l5">
+                            <i class="material-icons small">email</i> ${contato.email_contato}
+                        </div>
+                                `)
+                    }
+
+
+                    //Nova variável "cep" somente com dígitos.
+                    var cep = usuario.cd_cep;
+
+                    //Verifica se campo cep possui valor informado.
+                    if (cep != "") {
+
+                        //Expressão regular para validar o CEP.
+                        var validacep = /^[0-9]{8}$/;
+
+                        //Valida o formato do CEP.
+                        if (validacep.test(cep)) {
+
+                            //Consulta o webservice viacep.com.br/
+                            $.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function (dados) {
+
+                                if (!("erro" in dados)) {
+                                    //Atualiza os campos com os valores da consulta.
+                                    $("#logradouro").html(dados.logradouro);
+                                    $("#bairro").html(dados.bairro);
+                                    $("#cidade").html(dados.localidade);
+                                    $("#estado").html(dados.uf);
+
+                                } //end if.
+                                else {
+                                    $("#logradouro").html("-")
+                                    $("#bairro").html("-")
+                                    $("#cidade").html("-")
+                                    $("#estado").html("-")
+                                }
+                            });
+                        } //end if.
+                        else {
+                            $("#logradouro").html("-")
+                            $("#bairro").html("-")
+                            $("#cidade").html("-")
+                            $("#estado").html("-")
+                        }
+                    }
+                }
+            })
+        }
+
+        function deleta_contato(cd_contato) {
+            let url = "http://localhost:3000/contatos/" + cd_contato
+
+            $.ajax({
+                url: url,
+                contentType: "application:json",
+                type: "DELETE",
+                data: JSON.stringify({
+                    cd_contato: cd_contato
+                })
+            }).done((res) => {
+                if (res.err) {
+                    M.toast({html:res.err})
+                    console.log(res.err)
+                } else {
+                    M.toast({ html: "Contato deletado com sucesso!" })
+                    carrega_usuario()
+                }
+            })
+        }
+
+        function add_contato() {
+            let tel_user = $("#novo_tel_contato").val().trim()
+            let email_user = $("#novo_email_contato").val().trim()
+
+            if (tel_user == "" && email_user == "") {
+                M.toast({ html: "Campos vazios!" })
+            } else {
+                let url = "http://localhost:3000/contatos"
+
+                $.ajax({
+                    url: url,
+                    contentType: "application/json",
+                    type: "POST",
+                    data: JSON.stringify({
+                        cd_usuario: cd_usuario,
+                        telefone: tel_user,
+                        email_contato: email_user
+                    })
+                }).done((res) => {
+                    if (res.err) {
+                        M.toast({html:res.err})
+                        console.log(res.err)
+                    } else {
+                        M.toast({ html: "Contato inserido com sucesso!" })
+                        carrega_usuario()
+                    }
+                })
+            }
+        }
+
+
+        function carrega_contato(id_usuario) {
+            let url = "http://localhost:3000/contatos/" + id_usuario
+
+            $.ajax({
+                url: url,
+                contentType: "application/json",
+                type: "GET"
+            }).done((res) => {
+                if (res.err) {
+                    alert(res.err)
+                } else {
+                    console.log("--contatos--")
+                    console.log(res.contato)
+                    $("#contatos").html("")
+                    if (res.contato.length == []) {
+                        $("#contatos").html(`<label>Sem contato registrado</label>`)
+                    } else {
+                        let contato = res.contato
+                        for (let i = 0; i < contato.length; i++) {
+                            if (contato[i].tel_contato == null) {
+                                $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i><label> - </label>
+                                    </div>
+
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">email</i> <label>${contato[i].email_contato}</label>
+                                    </div>
+                                </div>
+                                `)
+
+                            } else if (contato[i].email_contato == null) {
+                                $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i><label>${contato[i].tel_contato}</label>
+                                    </div>
+
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">email</i> <label> - </label>
+                                    </div>
+                                </div>
+                                `)
+                            } else {
+                                $("#contatos").append(`
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">phone</i><label>${contato[i].tel_contato}</label>
+                                    </div>
+
+                                    <div class="col s6 m6 l6">
+                                        <i class="material-icons">email</i> <label>${contato[i].email_contato}</label>
+                                    </div>
+                                </div>
+                                `)
+                            }
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

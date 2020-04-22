@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang=pt-br>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/css/materialize.min.css"
+        media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/js/materialize.min.js"
+        media="screen,projection" />
+    <link rel="stylesheet" href="css/estilo.css">
+    <script src="css/materialize-v1.0.0/materialize/js/materialize.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <title>Serviço - QuickJob</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="navbar-fixed">
+            <nav class="red darken-2">
+                <div class="nav-wrapper">
+                    <ul class="right show-on-med-and-down">
+                        <li>
+                        <a onclick="voltar()">Voltar</a>
+                        </li>
+                        <li>
+                            <a onclick="sair()">Sair</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="container center-align">
+        <div class="row">
+            <h3 class="center">Painel de serviço</h3>
+        </div>
+
+        <div class="divider"></div>
+        <div class="row">
+
+            <div class="col s12 m6 l6">
+                <h5> <i class="material-icons">short_text</i> Nome do serviço
+                </h5>
+                <label id="nm_servico_label">Um nome</label>
+            </div>
+            <div class="col s12 m6 l6">
+                <h5> <i class="material-icons">description</i> Descrição do serviço
+                </h5>
+                <label id="ds_servico_label">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos recusandae quibusdam, magnam
+                    quos quis ipsa
+                    earum ut rem reprehenderit, repellendus et, molestias labore? Suscipit, molestias eos necessitatibus
+                    veritatis atque rem!</label>
+
+            </div>
+        </div>
+        <br><br>
+        <div class="row">
+
+            <div class="col s12 m6 l6">
+
+                <h5> <i class="material-icons">attach_money</i> Preço do serviço
+                </h5>
+                <label id="vl_servico_label">R$ 55,55 </label>
+            </div>
+
+            <div class="col s12 m6 l6">
+                <h5> <i class="material-icons">star_half</i> Avaliações</h5>
+                <div id="avaliacao">
+
+                </div>
+            </div>
+
+        </div> 
+        <br><br>
+        <div class="row">
+
+            <div class="col s12 m6 l6">
+
+                <h5> <i class="material-icons">visibility</i> Acessos
+                </h5>
+                <label id="acessos_label"></label>
+            </div>
+
+            <div class="col s12 m6 l6 center-align">
+                <h5> <i class="material-icons">edit</i> Ações</h5>
+                <br>
+                <div class="col s12 m6 l6">
+                    <a class="btn red darken-2 modal-trigger" href="#altera_dados">Alterar dados</a>
+                </div>
+
+                <div class="col s12 m6 l6">
+
+                    <a class="btn red darken-2 modal-trigger" href="#excluir_servico">Excluir serviço</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="altera_dados" class="modal">
+        <div class="modal-content">
+            <h4>Altere os dados do serviço</h4>
+
+            <div class="row">
+                <div class=" col s6">
+                        <label>Nome do serviço</label>
+                    <input id="nm_servico" type="text" class="validate">
+                    
+                </div>
+                <div class="col s6">
+                    
+                        <label>Valor do serviço</label>
+                    <input id="vl_servico" type="number" class="validate">
+                </div>
+            </div>
+            <div class="row">                
+                <div class="col s12">
+                    
+                        <label>Descrição do serviço</label>
+                    <textarea name="" id="desc_servico" cols="30"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="center-align">
+            <a class=" modal-close btn darken-2 red waves-effect waves-green" onclick="altera_dados_servico()">Alterar dados do serviço</a>
+        </div>
+        <br><br>
+    </div>
+
+    <div id="excluir_servico" class="modal">
+        <div class="modal-content">
+            <h4>Excluir serviço</h4>
+
+            <div class="row">
+                <h5>Tem certeza de que deseja excluir este serviço? Essa ação não poderá ser desfeita.</h5>
+            </div>
+        </div>
+        <div class="center-align">
+            <a class=" modal-close btn red darken-2 waves-effect waves-green" onclick="deleta_servico()">Excluir</a>
+            <a href="#!" class=" modal-close btn red darken-2 waves-effect waves-green">Cancelar</a>
+        </div>
+        <br><br>
+    </div>
+
+
+    <script>
+        let cd_usuario = localStorage.getItem("cd_usuario")
+        let nm_usuario = localStorage.getItem("nm_usuario")
+        if(cd_usuario == null || nm_usuario == null){
+            window.location.href = "index.html?msg=1"
+        }
+        var cd_servico = localStorage.getItem("id_servico_checar")
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems);
+            carrega_servico()
+        });
+
+        function sair(){
+            localStorage.clear()
+            window.location.href = "index.html"
+        }
+
+        function voltar(){
+            localStorage.removeItem("id_servico_checar")
+            window.location.href = "home.html"
+        }
+
+        function carrega_servico(){
+            if(cd_servico == null){
+                window.location.href = "home.html"
+            }else{
+                let url = "http://localhost:3000/servicos/" + cd_servico
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    contentType: "application/json"
+                }).done((res) => {
+                    if(res.err){
+                        M.toast({html:res.err})
+                        console.log(res.err)
+                    }else{
+                        console.log(res.servico)
+                        renderiza_avaliacao(res.servico[0].avaliacao)
+                        $("#nm_servico_label").html(res.servico[0].nm_servico)
+                        $("#ds_servico_label").html(res.servico[0].ds_servico)
+                        $("#vl_servico_label").html("R$ " + res.servico[0].vl_servico.toFixed(2))
+                        $("#acessos_label").html(`${res.servico[0].visualizacoes} acessos`)
+
+                        $("#nm_servico").val(res.servico[0].nm_servico)
+                        $("#desc_servico").val(res.servico[0].ds_servico)
+                        $("#vl_servico").val(res.servico[0].vl_servico)
+                    }
+                })
+            }
+        }
+
+        function deleta_servico(){
+            let url = "http://localhost:3000/servicos"
+
+            $.ajax({
+                url: url,
+                type: "DELETE",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    cd_servico: cd_servico
+                })
+            }).done((res) => {
+                if(res.err){
+                    M.toast({html:res.err})
+                }else{
+                    window.location.href = "home.html?msg=1"
+                }
+            })
+        }
+
+        function renderiza_avaliacao(valor){
+
+            $("#avaliacao").html("")
+
+            for(let i = 1; i < 6; i++){
+                if(i <= valor){
+                    $("#avaliacao").append(`
+                        <a><i class="material-icons small yellow-text">star</i></a>
+                    `)
+                }else{
+                    $("#avaliacao").append(`
+                        <a><i class="material-icons small black-text">star</i></a>
+                    `)
+                }
+            }
+        }
+
+        function altera_dados_servico(){
+            let nm_servico = $("#nm_servico").val().trim()
+            let ds_servico = $("#desc_servico").val().trim()
+            let vl_servico = $("#vl_servico").val().trim()
+
+            if(nm_servico == "" || ds_servico == "" || vl_servico == ""){
+                M.toast({html: "Campos vazios!"})
+            }else{
+                let url = "http://localhost:3000/servicos"
+
+                $.ajax({
+                    url: url,
+                    type: "PUT",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        cd_servico: cd_servico,
+                        nm_servico: nm_servico,
+                        ds_servico: ds_servico,
+                        vl_servico: vl_servico
+                    })
+                }).done((res) => {
+                    if(res.err){
+                        M.toast({html:res.err})
+                    }else{
+                        if(res.msg){
+                            M.toast({html: res.msg})
+                        }
+                        carrega_servico()
+                    }
+                })
+            }
+
+
+        }
+    </script>
+</body>
+
+</html>

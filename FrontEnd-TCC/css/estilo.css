@@ -1,0 +1,73 @@
+#empregada{
+	width: 700px;
+}
+#fox{
+	height: 500px;
+}
+body{
+	background-color:#fffefc;
+}
+#desc{
+	text-align: center;
+	padding-top: 50px;
+	
+}
+.nav-wrapper .brand-logo img{
+	height: 56px;
+}
+.btn{
+	border:1px solid #fff;
+	border-radius: 7%;
+}
+.waves-effect{
+	background-color:#fff;
+}
+#desc2{
+	background-color:#d40000;
+	color: #fffefc;
+	text-align: center;
+}
+
+#desc3{
+	text-align: center;
+}
+#money{
+	margin-top: 10%;
+	height: 300px;
+}
+.vermelho_top{
+	background: transparent;
+}
+
+#mensagens_chat{
+	height: 400px;
+	overflow: auto;
+}
+
+#solicitacoes{
+	height: 531px;
+	overflow: auto;
+}
+
+
+#solicitacoes::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+#solicitacoes::-webkit-scrollbar {
+	width: 9px;
+	background: transparent;
+}
+#solicitacoes::-webkit-scrollbar-thumb {
+	background: #e65d34;
+}
+
+#mensagens_chat::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+#mensagens_chat::-webkit-scrollbar {
+	width: 9px;
+	background: transparent;
+}
+#mensagens_chat::-webkit-scrollbar-thumb {
+	background: #e65d34;
+}

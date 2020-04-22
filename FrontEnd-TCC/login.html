@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="css/materialize-v1.0.0/materialize/js/materialize.js"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="css/materialize-v1.0.0/materialize/css/materialize.min.css"  media="screen,projection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login - QuickJob</title>
+</head>
+<body>
+		<nav class="red darken-2">
+				<div class="nav-wrapper">
+					<a href="index.html"> Voltar</a>          
+	  </div>
+	  </nav>  
+<div class="container">
+	<H3>Login</H3>
+	<label>Email:
+	<input name="email" type="email" id="input_email" required></label><br>
+	
+	<label>Senha:
+	<input name="senha" type="password" id="input_senha" required></label><br>
+
+	<button class="btn waves-effect waves-light red darken-2" onclick="login()">Entrar</button>
+	<button class="btn waves-effect waves-light red darken-2" onclick="cadastro()">Cadastro</button>
+</div>
+    <script>
+    	function loga_enter(){
+		let tecla = event.keyCode
+		if(tecla == 13){
+			login()
+		}
+	}
+	function login() {
+			let email = $("#input_email").val()
+			let senha = $("#input_senha").val()
+			email = email.trim()
+			senha = senha.trim()
+			if (email == "" || senha == "") {
+				M.toast({ html: "Campos vazios!" })
+			} else {
+				let url = "http://localhost:3000/login"
+				$.ajax({
+					url: url,
+					type: "POST",
+					contentType: "application/json",
+					data: JSON.stringify({
+						email_usuario: email,
+						senha_usuario: senha
+					})
+				}).done(function (res) {
+					if (res.erro) {
+						M.toast({html: "Erro interno do sistema"})
+						console.log(res.erro)
+					} else {
+						if (res.msg) {
+							M.toast({ html: res.msg })
+						} else {
+							var nm_usuario = res.nm_usuario
+							var cd_usuario = res.cd_usuario
+							console.log(nm_usuario, cd_usuario)
+							localStorage.setItem("cd_usuario", cd_usuario)
+							localStorage.setItem("nm_usuario", nm_usuario)
+							window.location.href = "home.html"
+						}
+
+					}
+
+				})
+			}
+		}
+
+   function cadastro(){
+	   window.location.href ="cadastro.html"
+   }
+		
+
+	
+    </script>
+
+</body>
+</html>
